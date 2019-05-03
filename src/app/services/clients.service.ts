@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from '@angular/common/http';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
@@ -8,13 +8,25 @@ import { environment } from '../../environments/environment';
 export class ClientsService {
   constructor(private http: HttpClient){}
 
+  headers = new HttpHeaders({    
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer '+this.getToken()
+  })
+
   // register
-  register(email: string, password: string, firstName: string, lastName: string, office: Number){
+  register(email: string, password: string, firstName: string, lastName: string, office: number){
     return this.http.post<any>(`${environment.apiUrl}/register`, {email, password, firstName, lastName, office})
       .pipe(
         map(response => {
-          console.log(response);
-          
+          return response;
+        })
+      );
+  }
+  // register
+  search(codeCity: number, codeOffice: number){
+    return this.http.get<any>(`${environment.apiUrl}/users/search/?codeCity=${codeCity}&codeOffice=${codeOffice}`, {headers: this.headers})
+      .pipe(
+        map(response => {
           return response;
         })
       );

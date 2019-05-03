@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 @Injectable({providedIn: 'root'})
 export class OfficesService {
   headers = new HttpHeaders({
-    'Content-Type': 'application/x-www-form-urlencoded',
+    'Content-Type': 'application/json',
     'Authorization': this.getToken()
   })
   constructor(private http: HttpClient){}
@@ -23,8 +23,8 @@ export class OfficesService {
   }
 
   // register
-  register(city: number, code: number, name: string){
-    return this.http.post<any>(`${environment.apiUrl}/offices/new`,{city, code, name}, { headers: this.headers })
+  register(city: number, code: number, name: string, address: string){
+    return this.http.post<any>(`${environment.apiUrl}/offices/new`,{city, code, name, address}, { headers: this.headers })
       .pipe(
         map(response => {
           return response;

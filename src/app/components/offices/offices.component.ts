@@ -32,6 +32,7 @@ export class OfficesComponent implements OnInit {
       name: ['', Validators.required],
       code: ['', Validators.required],
       city: ['', Validators.required],
+      address: ['', Validators.required],
     });
     this.getCities();
   }
@@ -72,7 +73,7 @@ export class OfficesComponent implements OnInit {
 
     this.loading = true;
 
-    this.officesService.register(this.f.city.value, this.f.code.value, this.f.name.value)
+    this.officesService.register(this.f.city.value, this.f.code.value, this.f.name.value, this.f.address.value)
       .pipe(first())
       .subscribe(
         data => {
