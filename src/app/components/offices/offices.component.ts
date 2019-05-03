@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { CitiesService, OfficesService, ClientsService } from './../../services';
+import { CitiesService, OfficesService } from './../../services';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  selector: 'app-offices',
+  templateUrl: './offices.component.html',
+  styleUrls: ['./offices.component.scss']
 })
-export class RegisterComponent implements OnInit{
+export class OfficesComponent implements OnInit {
 
   registerForm: FormGroup;
   submitted = false;
@@ -17,26 +17,21 @@ export class RegisterComponent implements OnInit{
   returnUrl: string;
   error = '';
   cities = [];
-  offices = [];
   success = false;
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private clientService: ClientsService,
     private citiesService: CitiesService,
     private officesService: OfficesService
   ) {}
 
   ngOnInit(){
     this.registerForm = this.formBuilder.group({
-      email: ['', Validators.required],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      password: ['', Validators.required],
+      name: ['', Validators.required],
+      code: ['', Validators.required],
       city: ['', Validators.required],
-      office: ['', Validators.required],
     });
     this.getCities();
   }
@@ -66,26 +61,6 @@ export class RegisterComponent implements OnInit{
       )
   }
 
-  getAllOffices(){
-    this.officesService.findAll(this.f.city.value)
-      .pipe(first())
-      .subscribe(
-        data => {
-          if(!data.success){
-            this.error = data.message;
-            this.loading = false;
-          }else{
-            this.offices = data.offices;
-          }
-
-        },
-        error => {
-          this.error = error;
-          this.loading = false;
-        }
-      )
-  }
-
   // on submit
   onSubmit(){
     this.submitted = true;
@@ -97,7 +72,7 @@ export class RegisterComponent implements OnInit{
 
     this.loading = true;
 
-    this.clientService.register(this.f.email.value, this.f.password.value, this.f.firstName.value, this.f.lastName.value, this.f.office.value)
+    this.officesService.register(this.f.city.value, this.f.code.value, this.f.name.value)
       .pipe(first())
       .subscribe(
         data => {
@@ -115,4 +90,5 @@ export class RegisterComponent implements OnInit{
         }
       )
   }
+
 }

@@ -1,3 +1,55 @@
-<p>
-  register works!
-</p>
+<h2>Registarse</h2>
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="email">email</label>
+    <input type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+      <div *ngIf="f.email.errors.required">El email es requerido</div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="firstName">Nombres</label>
+    <input type="text" formControlName="firstName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
+    <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+      <div *ngIf="f.firstName.errors.required">El campo Nombres es requerido</div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="lastName">Apellidos</label>
+    <input type="text" formControlName="lastName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" />
+    <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+      <div *ngIf="f.lastName.errors.required">El campo Apellidos es requerido</div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+    <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+      <div *ngIf="f.password.errors.required">El campo Password es requerido</div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="city">Ciudad</label>
+    <select formControlName="city" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.city.errors }" (change)="getAllOffices()">
+      <option [value]="city.code" *ngFor="let city of cities"> {{city.name}}</option>
+    </select>
+    <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+      <div *ngIf="f.city.errors.required">El campo Ciudad es requerido</div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="office">Sede</label>
+    <select formControlName="office" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.office.errors }">
+      <option [value]="office.code" *ngFor="let office of offices"> {{office.name}}</option>
+    </select>
+    <div *ngIf="submitted && f.office.errors" class="invalid-feedback">
+      <div *ngIf="f.office.errors.required">El campo Sede es requerido</div>
+    </div>
+  </div>
+  <div class="form-group text-center">
+    <button [disabled]="loading" class="btn btn-primary">Registrarse</button>
+    <img width="30px" height="30px" *ngIf="loading" src="https://myaccount.wigan.gov.uk/web/Images/loader.gif"/>
+  </div>
+  <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+  <div *ngIf="success" class="alert alert-success">Cliente Registrado</div>
+</form>

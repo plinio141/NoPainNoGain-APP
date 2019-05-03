@@ -2,42 +2,41 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { AuthenticationService } from './../../services';
+import { CitiesService } from './../../services';
 
-@Component({templateUrl: 'login.component.html'})
-export class LoginComponent implements OnInit{
+@Component({
+  selector: 'app-cities',
+  templateUrl: './cities.component.html',
+  styleUrls: ['./cities.component.scss']
+})
+export class CitiesComponent implements OnInit {
 
-  loginForm: FormGroup;
+  cityForm: FormGroup;
   submitted = false;
   loading = false;
   returnUrl: string;
   error = '';
-
-
+  cities = [];
+  offices = [];
+  success = false;
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authenticationService: AuthenticationService
+    private citiesService: CitiesService
   ) {}
 
   ngOnInit(){
-    this.loginForm = this.formBuilder.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required]
+    this.cityForm = this.formBuilder.group({
+      code: ['', Validators.required],
+      name: ['', Validators.required],
     });
-
-    // logout the person when he opens the app for the first time
-    this.authenticationService.logout();
-
-    // get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
   }
 
   // convenience getter for easy access to form fields
   get f(){
-    return this.loginForm.controls;
+    return this.cityForm.controls;
   }
 
   // on submit
@@ -45,23 +44,23 @@ export class LoginComponent implements OnInit{
     this.submitted = true;
 
     // stop if form is invalid
-    if(this.loginForm.invalid){
+    if(this.cityForm.invalid){
       return;
     }
 
     this.loading = true;
 
-    this.authenticationService.login(this.f.email.value, this.f.password.value)
+    this.citiesService.register(this.f.code.value, this.f.name.value)
       .pipe(first())
       .subscribe(
         data => {
           if(!data.success){
             this.error = data.message;
-            this.loading = false;
+            this.success = false;
           }else{
-            this.router.navigate([this.returnUrl]);
+            this.success = true;
           }
-
+          this.loading = false;
         },
         error => {
           this.error = error;
@@ -69,4 +68,5 @@ export class LoginComponent implements OnInit{
         }
       )
   }
+
 }

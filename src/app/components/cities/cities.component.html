@@ -1,0 +1,23 @@
+<h2>Crear ciudad</h2>
+<form [formGroup]="cityForm" (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="code">Identificador unico</label>
+    <input type="text" formControlName="code" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.code.errors }" />
+    <div *ngIf="submitted && f.code.errors" class="invalid-feedback">
+      <div *ngIf="f.code.errors.required">Identificador unico requerido</div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="name">Nombre</label>
+    <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+    <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+      <div *ngIf="f.name.errors.required">El campo Nombre es requerido</div>
+    </div>
+  </div>
+  <div class="form-group text-center">
+    <button [disabled]="loading" class="btn btn-primary">Guardar</button>
+    <img width="30px" height="30px" *ngIf="loading" src="https://myaccount.wigan.gov.uk/web/Images/loader.gif"/>
+  </div>
+  <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+  <div *ngIf="success" class="alert alert-success">Ciudad Registrada</div>
+</form>
