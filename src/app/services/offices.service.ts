@@ -23,7 +23,7 @@ export class OfficesService {
   }
 
   // register
-  register(city: string, code: string, name: string){
+  register(city: number, code: number, name: string){
     return this.http.post<any>(`${environment.apiUrl}/offices/new`,{city, code, name}, { headers: this.headers })
       .pipe(
         map(response => {
