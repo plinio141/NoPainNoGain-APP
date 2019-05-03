@@ -14,8 +14,7 @@ export class AuthenticationService {
       .pipe(
         map(response => {
           if(response.success){
-
-            localStorage.setItem('currentUser', JSON.stringify(response.token));
+            localStorage.setItem('currentUser', response.token);
           }
 
           return response;
